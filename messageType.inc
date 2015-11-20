@@ -1,0 +1,2 @@
+OF_MESSAGE_TYPE(version)
+OF_MESSAGE_TYPE(type)
