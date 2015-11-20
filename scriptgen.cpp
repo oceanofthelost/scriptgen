@@ -26,12 +26,6 @@ void makeDirectory(const char*);
 void createHelloReply(string);
 void createHelloVersion(string);
 
-// Simple function taht helps with cutting down repetition
-bool inline inSet(const set<string>& a, const string& b)
-{
-    return a.end() != a.find(b);
-}
-
 // Gets rid of repetative code
 template<class T>
 inline void version(const string& filename)
@@ -50,24 +44,24 @@ inline void type(const string& filename)
 
 int main(int argc, char* argv[])
 {
-    // Makes sure that program received the correct args  
+    // Makes sure that program received the correct args
     checkArgs(argc, argv);
 
-    //User sets this variable to the whatever directory they want to use. The rest of the 
-    // directory structure is derived off of the home directory. 
+    //User sets this variable to the whatever directory they want to use. The rest of the
+    // directory structure is derived off of the home directory.
     const string HOME = "./home/mininet";
     const string TESTSCRIPTS = HOME + "/fuzzing";
     const string ARGV1_filepath = TESTSCRIPTS + "/" + argv[1];
     const string ARGV2_filepath = ARGV1_filepath + "/" + argv[2];
 
     createFolderStructure(argv);
-// This will go away when a table is used. 
+// This will go away when a table is used.
     set<string> args(argv+1, argv+3);
 
 // This will change when the table method is implemented. Once all of this can be dynamicly loaded
-// the table can be implemented. 
+// the table can be implemented.
     if( inSet(args,"hello") )
-    {  
+    {
         if( inSet(args,"version") )
         {
             version<Hello>(ARGV2_filepath);
