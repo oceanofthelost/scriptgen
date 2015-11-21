@@ -18,6 +18,7 @@ extern std::set<std::string> OF_Message_Type;
 void checkArgs(int, char**);
 void printOFMessage();
 void printOFMessageType();
+bool inline inSet(const std::set<std::string>&, const std::string&);
 bool validArgs(char**);
 
-#endif 
+#endif
