@@ -27,7 +27,6 @@ std::set<std::string> OF_Message_Type = {
 
 void checkArgs(int argc, char* argv[] )
 {
-
     if( (argc != 3) )
     {
         std::cout<<"Illegal number of parameters, Format is ./scriptgen {OF Message} {OF Message Type}"<<std::endl;
@@ -63,12 +62,15 @@ void printOFMessageType()
     }
 }
 
+// Simple function taht helps with cutting down repetition
+bool inline inSet(const std::set<std::string>& a, const std::string& b)
+{
+    return a.end() != a.find(b);
+}
+
 bool validArgs(char* argv[])
 {
-    auto message = OF_Messages.find( std::string(argv[1]) );
-    auto type = OF_Message_Type.find( std::string(argv[2]) );
-
-    // if message or type point to the end of the set then that means that the arguments to the 
-    // program are not valid. So return false. Valid means taht both arguments are true. 
-    return ( (message == OF_Messages.end() or type == OF_Message_Type.end() ) ? 0 : 1);
+    // if message or type point to the end of the set then that means that the arguments to the
+    // program are not valid. So return false. Valid means taht both arguments are true.
+    return inSet(OF_Messages, argv[1]) and inSet(OF_Message_Type, argv[2]);
 }

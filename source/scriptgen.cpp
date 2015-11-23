@@ -17,8 +17,13 @@ Description     : Inspired by Kashyap Thimmaraju
 //#include <sys/types.h>
 #include <utility>
 #include "menu.h"
-#include "helloMessage.h"
-#include "featReplyMessage.h"
+
+#include "hello.hpp"
+#include "featureRes.hpp"
+#include "barrierRes.hpp"
+#include "getConfigRes.hpp"
+#include "statsRes.hpp"
+#include "packetIn.hpp"
 
 using namespace std;
 
@@ -33,15 +38,12 @@ bool inline inSet(const set<string>& a, const string& b)
     return a.end() != a.find(b);
 }
 
-
-
-
 // These templates will be used to generate the table latter on. 
 // This template provides a convient templet inline function 
 // that all i need to do is pass a subclass of messageBase and
 // a filename and the function below will expand to a function
 // call for one of the message tpes that we plan to fuzz. 
-
+#if 0
 #define OF_MESSAGE_TYPE( name ) template<class T> \
     inline void name(const string& filename) { \
             messageBase* tmp = new T( filename ); \
@@ -49,26 +51,28 @@ bool inline inSet(const set<string>& a, const string& b)
             delete tmp;}
 #include "messageType.inc"
 #undef OF_MESSAGE_TYPE
-
+#endif
 int main(int argc, char* argv[])
 {
 
-    map<pair<string, string>, int> mymap;
+    //    map<pair<string, string>, int> mymap;
 
-mymap.insert(make_pair(make_pair("1","2"), 3)); //edited
-cout << mymap[make_pair("1","2")];
-    cout<<sizeof(Num_OF_Message_Types)<<endl;
-    cout<<sizeof(Num_OF_Message)<<endl;
+    //mymap.insert(make_pair(make_pair("1","2"), 3)); //edited
+    //cout << mymap[make_pair("1","2")];
+    //    cout<<sizeof(Num_OF_Message_Types)<<endl;
+    //    cout<<sizeof(Num_OF_Message)<<endl;
     // Makes sure that program received the correct args  
     checkArgs(argc, argv);
 
-    //User sets this variable to the whatever directory they want to use. The rest of the 
+
+    //User sets this variable to the whatever directory they want to use. The rest of the
     // directory structure is derived off of the home directory.
+
     const string ROOT = "./home";
     const string HOME = ROOT + "/mininet";
     const string TESTSCRIPTS = HOME + "/fuzzing";
     const string ARGV1_filepath = TESTSCRIPTS + "/" + argv[1];
-    const string ARGV2_filepath = ARGV1_filepath + "/" + argv[2];
+    const string ARGV2_filepath = ARGV1_filepath + "/" + argv[2];   
 
     makeDirectory( ROOT.c_str() );
     makeDirectory( HOME.c_str() );
@@ -76,38 +80,63 @@ cout << mymap[make_pair("1","2")];
     makeDirectory( ARGV1_filepath.c_str() );
     makeDirectory( ARGV2_filepath.c_str() );
 
-// This will go away when a table is used. 
+    // This will go away when a table is used.
     set<string> args(argv+1, argv+3);
 
-// This will change when the table method is implemented. Once all of this can be dynamicly loaded
-// the table can be implemented. 
+    // This will change when the table method is implemented. Once all of this can be dynamicly loaded
+    // the table can be implemented.
     if( inSet(args,"hello") )
-    {  
+    {
+        Hello hello(ARGV2_filepath);
         if( inSet(args,"version") )
         {
-            version<Hello>(ARGV2_filepath);
+            hello.version();
         }
         else if ( inSet(args,"type" ) )
         {
-            type<Hello>(ARGV2_filepath);
+            hello.type();
         }
     }
     else if( inSet(args, "featureRes") )
     {
+        FeatureRes featureres(ARGV2_filepath);
         if( inSet(args,"version") )
         {
-            version<FeatureResponse>(ARGV2_filepath);
+            featureres.version();
         }
-        else if ( inSet(args,"type" ) )
+    }
+    else if( inSet(args, "barrierRes") )
+    {
+        BarrierRes barrierres(ARGV2_filepath);
+        if( inSet(args, "version" ) )
         {
-            type<FeatureResponse> (ARGV2_filepath);
+            barrierres.version();
         }
+    }
+    else if( inSet(args, "getConfigRes") )
+    {
+        GetConfigRes getconfigres(ARGV2_filepath);
+        if( inSet(args, "version") )
+        {
+            getconfigres.version();
+        }
+    }
+    else if( inSet(args, "statsRes") )
+    {
+        StatsRes statsres(ARGV2_filepath);
+        if( inSet(args, "version") )
+        {
+            statsres.version();
+        }
+    }
+    else
+    {
+        cout<<"ERROR: No Definition"<<endl;
     }
 }
 
 void makeDirectory(const char* filename)
 {
-    cout<<filename<<endl;
     if( (mkdir(filename,0777) != 0) && (errno != EEXIST ))
     {
         cout<<"ERROR: "<<filename<<": "<<std::strerror(errno)<<endl;

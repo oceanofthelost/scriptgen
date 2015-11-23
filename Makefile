@@ -5,22 +5,29 @@
 #Copyright       : 2015
 #Creation Date   : 11/19/2015
 #*******************************************************************************/
-CXX = g++
-CXXFLAGS = -MD -MP -pedantic -Wall -std=c++11 -Wextra 
-CXXSRC = $(wildcard *.cpp)
-EXE = scriptgen
+CXX := g++
+CXXFLAGS := -pedantic -Wall -std=c++11 -Wextra 
+CXXSRC := $(wildcard ./source/*.cpp)
+SOURCEDIR := ./source
+USEROPTIONS := ./settings/ 
+#OFMESSAGE := ./OFMessages
+OFMESSAGE := ./Generator
+INCLUDE := -I $(USEROPTIONS) -I $(OFMESSAGE) -I $(SOURCEDIR)
+CXXOBJ := $(patsub %.cpp, %.o, $(CXXOBJ))
+EXE := scriptgen
 
 
-$(EXE):$(CXXSRC:%.cpp=%.o)
-	$(CXX) $(CXXFLAGS) -o $(EXE) $(CXXSRC:.cpp=.o)
 
--include $(CXXSRC:.cpp=.d)
 
+
+$(EXE):$(CXXSRC)
+	$(CXX) $(CXXFLAGS) -o $(EXE) $(CXXSRC) $(INCLUDE)
+
+generate: ./Generator/fileGenerator.cpp
+	$(CXX) $(CXXFLAGS) -o ./Generator/generate ./Generator/fileGenerator.cpp $(INCLUDE)
+	-./Generator/generate
 
 clean:
-	-rm $(CXXSRC:%.cpp=%.o) $(CXXSRC:%.cpp=%.d) $(EXE)
-
-test:
-	./test.sh
+	-@rm $(EXE) *.d ./Generator/*.hpp > /dev/null  2>&1 ||:
 
 remake: clean $(EXE)
