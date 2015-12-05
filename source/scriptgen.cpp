@@ -104,6 +104,10 @@ int main(int argc, char* argv[])
         {
             featureres.version();
         }
+        else if (inSet(args,"capabilities") )
+        {
+            featureres.capabilities();
+        }
     }
     else if( inSet(args, "barrierRes") )
     {

@@ -5,6 +5,8 @@ PARAM( config,  helloVersion          , 00000001 )
 PARAM( config,  helloType             , HELLO )
 PARAM( config,  featuresReplyVersion  , 00000001 )
 PARAM( config,  featuresReplyType     , FEATURES_REPLY)
+PARAM( config,  featuresReplycapabilities , 199)
+
 PARAM( config,  barrierReplyVersion   , 00000001)
 PARAM( config,  barrierReplyType      , BARRIER_REPLY)
 PARAM( config,  getConfReplyVersion   , 00000001)

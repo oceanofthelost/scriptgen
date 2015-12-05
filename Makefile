@@ -20,7 +20,7 @@ EXE := scriptgen
 
 
 
-$(EXE):$(CXXSRC)
+$(EXE):$(CXXSRC) ./Generator/*.hpp
 	$(CXX) $(CXXFLAGS) -o $(EXE) $(CXXSRC) $(INCLUDE)
 
 generate: ./Generator/fileGenerator.cpp
@@ -28,6 +28,6 @@ generate: ./Generator/fileGenerator.cpp
 	-./Generator/generate
 
 clean:
-	-@rm $(EXE) *.d ./Generator/*.hpp > /dev/null  2>&1 ||:
+	-@rm $(EXE) *.d ./Generator/*.hpp ./Generator/generate > /dev/null  2>&1 ||:
 
 remake: clean $(EXE)

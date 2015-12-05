@@ -90,7 +90,6 @@ void generate( const string& filename )
 {
     string filepath = "./Generator/" + filename + ".hpp";
     ofstream write( filepath.c_str() );
-
     if( write.is_open() )
     {
         printHeader(write, filename);
@@ -113,6 +112,7 @@ void generate( const string& filename )
 
 int main()
 {
+
     #define OF_MESSAGE( message ) generate( string( #message ) );
     #include "messages.inc"
     #undef OF_MESSAGE
