@@ -25,9 +25,9 @@ $(EXE):$(CXXSRC) ./Generator/*.hpp
 
 generate: ./Generator/fileGenerator.cpp
 	$(CXX) $(CXXFLAGS) -o ./Generator/generate ./Generator/fileGenerator.cpp $(INCLUDE)
-	-./Generator/generate
+	-@./Generator/generate
 
 clean:
-	-@rm $(EXE) *.d ./Generator/*.hpp ./Generator/generate > /dev/null  2>&1 ||:
+	-@rm $(EXE) *.d ./Generator/*.hpp ./Generator/generate ./Generator/OFMessages.h > /dev/null  2>&1 ||:
 
 remake: clean $(EXE)

@@ -1,30 +1,30 @@
 /*******************************************************************************
-Name            : GetConfigRes.hpp
+Name            : packetIn.hpp
 Author          : Sean Alling
 Version         : V0.1
 Copyright       : 2015
 Creation Date   : 11/19/2015
 *******************************************************************************/
-#ifndef GET_CONFIG_RES_ECS260
-#define GET_CONFIG_RES_ECS260
+#ifndef PACKETIN_ECS260
+#define PACKETIN_ECS260
 
 #include <string>
 #include "messageBase.hpp"
 
-class GetConfigRes : public messageBase<GetConfigRes>
+class PacketIn : public messageBase<PacketIn>
 {
     public:
-        GetConfigRes(std::string file)
+        PacketIn(std::string file)
         {
             filename=file;
         };
-        ~GetConfigRes(){};
+        ~PacketIn(){};
 
-    void version()
+    void Version()
     {
         for(auto i = -128; i<=127; i++)
         {
-            MsgParameter.config_getConfReplyVersion = to_string(i);
+            MsgParameter.config_pktInVersion = to_string(i);
             printConfig( to_string(i) );
         }
     }

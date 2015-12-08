@@ -19,7 +19,7 @@ class Hello : public messageBase<Hello>
             filename=file;
         };
         ~Hello(){};
-        void version()
+        void Version()
         {
             for(auto i = -128; i<=127; i++)
             {
@@ -28,7 +28,7 @@ class Hello : public messageBase<Hello>
             }
         }
 
-        void type()
+        void Type()
         {
             std::string tmp[] = {"HELLO", "FEATURES_REPLY", "BARRIER_REPLY", "GET_CONFIG_REPLY", "STATS_REPLY", "PACKET_IN"};
 

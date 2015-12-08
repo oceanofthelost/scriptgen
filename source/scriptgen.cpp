@@ -6,6 +6,7 @@ Copyright       : 2015
 Creation Date   : 11/19/2015
 Description     : Inspired by Kashyap Thimmaraju
 *******************************************************************************/
+
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -18,12 +19,7 @@ Description     : Inspired by Kashyap Thimmaraju
 #include <utility>
 #include "menu.h"
 
-#include "hello.hpp"
-#include "featureRes.hpp"
-#include "barrierRes.hpp"
-#include "getConfigRes.hpp"
-#include "statsRes.hpp"
-#include "packetIn.hpp"
+#include "OFMessages.h"
 
 using namespace std;
 
@@ -38,30 +34,26 @@ bool inline inSet(const set<string>& a, const string& b)
     return a.end() != a.find(b);
 }
 
-// These templates will be used to generate the table latter on. 
-// This template provides a convient templet inline function 
-// that all i need to do is pass a subclass of messageBase and
-// a filename and the function below will expand to a function
-// call for one of the message tpes that we plan to fuzz. 
-#if 0
-#define OF_MESSAGE_TYPE( name ) template<class T> \
-    inline void name(const string& filename) { \
-            messageBase* tmp = new T( filename ); \
-            tmp -> name();                     \
-            delete tmp;}
-#include "messageType.inc"
-#undef OF_MESSAGE_TYPE
-#endif
+
+template<typename T>
+void test(T* passed,set<string> args)
+{
+    if (false)
+    {
+        // This is needed to get the below macro expansion to work. 
+    }
+    #define OF_MESSAGE_TYPE( name ) else if( inSet(args, #name) ) { \
+         passed -> name(); }
+    #include "messageType.inc"
+    #undef OF_MESSAGE_TYPE
+}
+
+
+
+
+
 int main(int argc, char* argv[])
 {
-
-    //    map<pair<string, string>, int> mymap;
-
-    //mymap.insert(make_pair(make_pair("1","2"), 3)); //edited
-    //cout << mymap[make_pair("1","2")];
-    //    cout<<sizeof(Num_OF_Message_Types)<<endl;
-    //    cout<<sizeof(Num_OF_Message)<<endl;
-    // Makes sure that program received the correct args  
     checkArgs(argc, argv);
 
 
@@ -72,7 +64,7 @@ int main(int argc, char* argv[])
     const string HOME = ROOT + "/mininet";
     const string TESTSCRIPTS = HOME + "/fuzzing";
     const string ARGV1_filepath = TESTSCRIPTS + "/" + argv[1];
-    const string ARGV2_filepath = ARGV1_filepath + "/" + argv[2];   
+    const string ARGV2_filepath = ARGV1_filepath + "/" + argv[2];
 
     makeDirectory( ROOT.c_str() );
     makeDirectory( HOME.c_str() );
@@ -85,58 +77,18 @@ int main(int argc, char* argv[])
 
     // This will change when the table method is implemented. Once all of this can be dynamicly loaded
     // the table can be implemented.
-    if( inSet(args,"hello") )
+
+    if (false)
     {
-        Hello hello(ARGV2_filepath);
-        if( inSet(args,"version") )
-        {
-            hello.version();
-        }
-        else if ( inSet(args,"type" ) )
-        {
-            hello.type();
-        }
+        // This is needed to get the below macro expansion to work. 
     }
-    else if( inSet(args, "featureRes") )
-    {
-        FeatureRes featureres(ARGV2_filepath);
-        if( inSet(args,"version") )
-        {
-            featureres.version();
-        }
-        else if (inSet(args,"capabilities") )
-        {
-            featureres.capabilities();
-        }
-    }
-    else if( inSet(args, "barrierRes") )
-    {
-        BarrierRes barrierres(ARGV2_filepath);
-        if( inSet(args, "version" ) )
-        {
-            barrierres.version();
-        }
-    }
-    else if( inSet(args, "getConfigRes") )
-    {
-        GetConfigRes getconfigres(ARGV2_filepath);
-        if( inSet(args, "version") )
-        {
-            getconfigres.version();
-        }
-    }
-    else if( inSet(args, "statsRes") )
-    {
-        StatsRes statsres(ARGV2_filepath);
-        if( inSet(args, "version") )
-        {
-            statsres.version();
-        }
-    }
-    else
-    {
-        cout<<"ERROR: No Definition"<<endl;
-    }
+    #define OF_MESSAGE( name ) else if( inSet(args, #name) ) { \
+    name var(ARGV2_filepath); \
+    test<name>(&var,args); }
+    #include "messages.inc"
+    #undef OF_MESSAGE
+
+
 }
 
 void makeDirectory(const char* filename)

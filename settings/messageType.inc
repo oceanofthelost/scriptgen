@@ -1,4 +1,3 @@
-OF_MESSAGE_TYPE(version)
-OF_MESSAGE_TYPE(type)
-OF_MESSAGE_TYPE(capabilities)
-OF_MESSAGE_TYPE(sean)
+OF_MESSAGE_TYPE(Version)
+OF_MESSAGE_TYPE(Type)
+OF_MESSAGE_TYPE(Capabilities)

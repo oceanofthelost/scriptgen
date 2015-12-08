@@ -20,7 +20,7 @@ class FeatureRes : public messageBase<FeatureRes>
         };
         ~FeatureRes(){};
 
-    void version()
+    void Version()
     {
         for(auto i = -128; i<=127; i++)
         {

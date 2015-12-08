@@ -36,7 +36,7 @@ class messageBase
         messageBase(){};
         ~messageBase(){};
         parameters MsgParameter;
-        #define OF_MESSAGE_TYPE( name ) void name(){cout<<"No User Definition"<<endl;}
+        #define OF_MESSAGE_TYPE( name ) void name(){cout<<"No User Definition" <<endl;}
         #include "messageType.inc"
         #undef OF_MESSAGE_TYPE
 };

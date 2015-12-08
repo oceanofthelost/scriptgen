@@ -51,6 +51,7 @@ void printHeaderGaurds(ofstream& file, string input)
 void printIncludes(ofstream& file)
 {
     file<<"#include <string>"<<endl;
+    file<<"#include \"fuzzer.h\""<<endl;
     file<<"#include \"messageBase.hpp\""<<endl;
 }
 
@@ -110,10 +111,34 @@ void generate( const string& filename )
     write.close();
 }
 
+void generateHeader()
+{
+    string filepath = "./Generator/OFMessages.h";
+    ofstream write( filepath.c_str() );
+    if( write.is_open() )
+    {
+        string inc = "#include \"";
+        #define OF_MESSAGE( name ) write<<inc<<#name<<".hpp\""<<endl;
+        #include "messages.inc"
+        #undef OF_MESSAGE
+    }
+    else
+    {
+        std::cout<<"Can't open file"<<endl;
+        exit(errno);
+    }
+    write.close();
+}
+
 int main()
 {
 
+    // Call the generate function for evry one of the OF messages. This will 
+    // produce the *.hpp files/ 
     #define OF_MESSAGE( message ) generate( string( #message ) );
     #include "messages.inc"
     #undef OF_MESSAGE
+
+    // Generate the header file that contains all of the aove *.hpp files.
+    generateHeader();
 }

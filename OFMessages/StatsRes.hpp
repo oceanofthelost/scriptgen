@@ -20,7 +20,7 @@ class StatsRes : public messageBase<StatsRes>
         };
         ~StatsRes(){};
 
-    void version()
+    void Version()
     {
         for(auto i = -128; i<=127; i++)
         {
